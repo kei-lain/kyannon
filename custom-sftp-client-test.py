@@ -1,4 +1,5 @@
 import paramiko
+from scp import SCPClient
 import Cryptodome
 import socket
 import os
@@ -28,6 +29,20 @@ def encrypt_file(filepath, key):
         encrypted_file.write(tag)
         encrypted_file.write(ciphertext)
 
+def decrypt_file(localpath, key):
+    with open(localpath, 'rb') as file:
+        nonce = file.read(16)
+        tag = file.read(16)
+        ciphertext = file.read()
+
+    cipher = AES.new(key, AES.MODE_EAX, nonce=nonce)
+    plaintext = cipher.decrypt_and_verify(ciphertext, tag)
+
+    # localpath = localpath[:-4]  # Remove the '.enc' extension
+    with open(localpath, 'wb') as decrypted_file:
+        decrypted_file.write(plaintext)
+
+
 def Transportation(host, username, password):
     ssh_client = paramiko.SSHClient()
     # sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -36,13 +51,18 @@ def Transportation(host, username, password):
     ssh_client.connect(host, 22 ,username,password)
     ftp_client=ssh_client.open_sftp()
 
-    filepath = '/home/lain/dockerimages.txt.enc'
-    localpath = '/home/lain/dockerimages.txt'
+    filepath = '/home/lain/spaghetti.txt'
+    localpath = '/home/lain/spaghetti.txt'
     key = get_random_bytes(32)
     encryptedFile = encrypt_file(localpath, key)
     localpath = (f"{localpath}.enc")
     print(f"sending {localpath} to {host1}")
     ftp_client.put(localpath, filepath)
+    print("send successfully")
+    scp = SCPClient(ssh_client.get_transport())
+    scp.put(('remotedecrypt.py'),'/home/lain/remotedecyrpt.py')
+    decrption_command = (f"python -c from /home/lain/remotedecrypt.py import decryptfile; decryptfile({filepath}).")
+    ssh_client.exec_command('')
     ftp_client.close()
 
 
