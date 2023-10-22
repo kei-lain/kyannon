@@ -1,0 +1,14 @@
+Metadata-Version: 2.1
+Name: kyannon
+Version: 0.0.1
+Summary: This CLI script encrypts files via AES-256 before sending them over SFTP and decrypts them on the other side. This prevents sensitive files from being susceptible to packet capturing.
+Home-page: https://github.com/kei-lain/kyannon
+Author: Lainey Tubbs
+Author-email: Laineytubbs@protonmail.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+
+This CLI script encrypts files via AES-256 before sending them over SFTP and decrypts them on the other side. This prevents sensitive files from being susceptible to packet capturing.

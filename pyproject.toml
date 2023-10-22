@@ -1,0 +1,4 @@
+[build-system]
+requires = ["setuptools","scp","python-aes256",
+"PyNaCl","pycryptodomex", "pycryptodome", "pycparser","cffi", "paramiko","cryptography","bcyrpt"]
+build-backend = "setuptools.build_meta"
